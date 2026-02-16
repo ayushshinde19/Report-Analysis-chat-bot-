@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Smart Report Analyzer | AI Document Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loader">
+                <div class="loader-circle"></div>
+                <div class="loader-text">Initializing Report Analyzer...</div>
+                <div class="loader-subtext">Powered by Google Gemini AI</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="logo-text">
+                        <h1>Smart Report Analyzer</h1>
+                        <p class="tagline">Upload, Analyze, and Chat with Your Documents</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <i class="fas fa-server"></i>
+                        <span id="serverStatus">Checking...</span>
+                        <div class="status-dot" id="serverStatusDot"></div>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-robot"></i>
+                        <span id="aiStatus">AI Ready</span>
+                        <div class="status-dot online"></div>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-database"></i>
+                        <span id="docCount">0 Docs</span>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="refreshBtn" title="Refresh">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="btn btn-primary" id="clearAllBtn">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Upload Section -->
+                <div class="card upload-section">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Upload Documents</h3>
+                        <div class="file-count" id="fileCount">0 files</div>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-file-upload"></i>
+                            <h4>Drag & Drop Files Here</h4>
+                            <p>or click to browse</p>
+                            <div class="supported-formats">
+                                <span>PDF</span>
+                                <span>DOCX</span>
+                                <span>TXT</span>
+                                <span>CSV</span>
+                                <span>Excel</span>
+                                <span>Images</span>
+                            </div>
+                            <input type="file" id="fileInput" multiple 
+                                   accept=".pdf,.docx,.doc,.txt,.csv,.xlsx,.xls,.png,.jpg,.jpeg">
+                            <button class="btn btn-secondary" id="browseBtn">
+                                <i class="fas fa-folder-open"></i> Browse Files
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-progress" id="uploadProgress" style="display: none;">
+                        <div class="progress-header">
+                            <span>Upload Progress</span>
+                            <span id="progressText">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-actions">
+                        <button class="btn btn-primary btn-block" id="processBtn" disabled>
+                            <i class="fas fa-play"></i> Upload & Process
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Documents List -->
+                <div class="card documents-section">
+                    <div class="card-header">
+                        <h3><i class="fas fa-folder"></i> Uploaded Documents</h3>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchDocs" placeholder="Search documents...">
+                        </div>
+                    </div>
+                    
+                    <div class="documents-list" id="documentsList">
+                        <div class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <p>No documents uploaded</p>
+                            <small>Upload files to get started</small>
+                        </div>
+                    </div>
+                    
+                    <div class="documents-stats">
+                        <div class="stat">
+                            <span class="stat-label">Total</span>
+                            <span class="stat-value" id="totalDocs">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Size</span>
+                            <span class="stat-value" id="totalSize">0 MB</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Last</span>
+                            <span class="stat-value" id="lastUpload">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <h2><i class="fas fa-robot"></i> Document Assistant</h2>
+                        <p class="chat-subtitle">Ask questions about your uploaded documents</p>
+                    </div>
+                    
+                    <div class="chat-actions">
+                        <button class="btn btn-icon" id="clearChatBtn" title="Clear Chat">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="btn btn-icon" id="exportBtn" title="Export Chat">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn btn-icon" id="suggestBtn" title="Suggest Questions">
+                            <i class="fas fa-lightbulb"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="assistant-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    <h3>👋 Welcome to Smart Report Analyzer!</h3>
+                                    <p>I'm your AI assistant. I can help you:</p>
+                                    <ul>
+                                        <li>📊 Analyze uploaded documents (PDF, DOCX, TXT, Excel, etc.)</li>
+                                        <li>🔍 Search for specific information across documents</li>
+                                        <li>📝 Generate summaries and extract key insights</li>
+                                        <li>💡 Answer questions based on document content</li>
+                                        <li>📈 Compare information across multiple documents</li>
+                                    </ul>
+                                    <p><strong>To get started:</strong></p>
+                                    <ol>
+                                        <li>Upload your documents using the left panel</li>
+                                        <li>Click "Upload & Process" to analyze them</li>
+                                        <li>Ask me questions about your documents!</li>
+                                    </ol>
+                                    <div class="quick-questions">
+                                        <p><strong>Try asking:</strong></p>
+                                        <div class="question-chips">
+                                            <span class="question-chip" data-question="Summarize all documents">Summarize all documents</span>
+                                            <span class="question-chip" data-question="Find financial data">Find financial data</span>
+                                            <span class="question-chip" data-question="What are the key findings?">Key findings</span>
+                                            <span class="question-chip" data-question="Compare documents">Compare documents</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="typing-text">AI is analyzing your documents...</span>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input">
+                    <div class="input-container">
+                        <div class="input-actions">
+                            <button class="btn btn-icon" id="attachBtn" title="Attach File">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                        </div>
+                        
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Ask about your documents... (e.g., 'What were the Q3 sales?', 'Summarize this document', 'Find key information')"
+                            rows="1"
+                        ></textarea>
+                        
+                        <button class="btn btn-primary" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="quick-prompts">
+                        <button class="prompt-btn" data-prompt="Summarize the main points">
+                            <i class="fas fa-file-contract"></i> Summarize
+                        </button>
+                        <button class="prompt-btn" data-prompt="Find financial information">
+                            <i class="fas fa-chart-line"></i> Financial Data
+                        </button>
+                        <button class="prompt-btn" data-prompt="What are the key findings?">
+                            <i class="fas fa-star"></i> Key Findings
+                        </button>
+                        <button class="prompt-btn" data-prompt="Extract important dates">
+                            <i class="fas fa-calendar"></i> Dates
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>Report Analyzer v1.0</span>
+                    <span class="divider">•</span>
+                    <span>Powered by Google Gemini AI</span>
+                    <span class="divider">•</span>
+                    <span>Files: <span id="footerDocCount">0</span></span>
+                </div>
+                <div class="footer-right">
+                    <span id="currentTime">--:--</span>
+                    <span class="divider">•</span>
+                    <span id="connectionStatus" class="status-badge">
+                        <i class="fas fa-wifi"></i> <span id="connectionText">Connecting...</span>
+                    </span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Processing Modal -->
+    <div class="modal" id="processingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cogs"></i> Processing Documents</h3>
+            </div>
+            <div class="modal-body">
+                <div class="processing-content">
+                    <div class="spinner"></div>
+                    <h4 id="processingTitle">Processing your documents...</h4>
+                    <p id="processingMessage">Please wait while we analyze your files</p>
+                    <div class="processing-details" id="processingDetails"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Details Modal -->
+    <div class="modal" id="documentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="documentModalTitle">Document Details</h3>
+                <button class="modal-close" onclick="app.closeModal('documentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="document-details" id="documentDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
