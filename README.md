@@ -33,11 +33,9 @@ STEP 2: Extract the ZIP file
    • Select "Extract All" (Windows) or double-click (Mac)
    • Remember the folder location where you extracted it
 
-STEP 3: Open Command Prompt / Terminal
-   • WINDOWS: Press Windows key + R, type "cmd", press Enter
-   • MAC: Press Command + Space, type "terminal", press Enter
-   • LINUX: Press Ctrl + Alt + T
-
+STEP 3: Open Visual Studio / Terminal
+   • Open File which is extracted then drag server.js file 
+   
 STEP 4: Navigate to the extracted folder
    • In the command prompt, type: cd [folder-path]
    • Example: cd C:\Users\YourName\Desktop\server-folder
@@ -50,7 +48,7 @@ STEP 5: Install required software
    • Wait for installation to complete (you'll see a progress bar)
 
 STEP 6: Start the server
-   • In the command prompt, type: node server.js
+   • In the VS code runner terminal, type: node server.js
    • Press Enter
    • You should see a colorful box with server information
 
@@ -74,21 +72,10 @@ Copy and paste these URLs in your browser:
 • View all uploaded documents:
   http://localhost:3002/api/documents
 
-🔄 TO UPLOAD FILES:
--------------------
-You'll need a tool like:
-- Postman (https://www.postman.com/downloads/) OR
-- Thunder Client (VS Code extension)
-
-In Postman:
-1. Create a new POST request to: http://localhost:3002/api/upload
-2. In "Body" tab, select "form-data"
-3. Add a field named "files" (type = File)
-4. Select your document and send
-
 ⚠️ IMPORTANT NOTES:
 ------------------
 • The server runs on port 3002
+• Make sure APIKEY should be Paid version open .env file and replace your APIKEY form https://aistudio.google.com/api-keys
 • Maximum file size: 50MB
 • Supported files: PDF, DOCX, TXT, CSV, XLSX, XLS, PNG, JPG, JPEG
 • Keep the command prompt window open while testing
@@ -114,6 +101,7 @@ Can't access the server:
 📞 NEED HELP?
 ------------
 Contact: ayushshinde495@gmail.com 
-Phone: [Your Phone Number]
+Phone: 8766722758
 
 Thank you for testing! 🚀
+
