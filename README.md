@@ -34,12 +34,12 @@ STEP 2: Extract the ZIP file
    • Remember the folder location where you extracted it
 
 STEP 3: Open Visual Studio / Terminal
-   • Open File which is extracted then drag server.js file 
+   • Open File directory which is extracted 
    
 STEP 4: Navigate to the extracted folder
-   • In the command prompt, type: cd [folder-path]
-   • Example: cd C:\Users\YourName\Desktop\server-folder
-   
+   • Open the project Folder drag Server .env file and serveer.js file 
+   • Replace APIKey in .env file  
+
    TIP: You can drag the folder into the command prompt to paste the path automatically
 
 STEP 5: Install required software
@@ -104,4 +104,5 @@ Contact: ayushshinde495@gmail.com
 Phone: 8766722758
 
 Thank you for testing! 🚀
+
 
