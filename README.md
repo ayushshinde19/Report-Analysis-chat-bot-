@@ -1,6 +1,6 @@
-==============================================
+
 DOCUMENT ANALYSIS SERVER - SETUP INSTRUCTIONS
-==============================================
+
 
 Thank you for testing our application! 
 
@@ -104,5 +104,6 @@ Contact: ayushshinde495@gmail.com
 Phone: 8766722758
 
 Thank you for testing! 🚀
+
 
 
